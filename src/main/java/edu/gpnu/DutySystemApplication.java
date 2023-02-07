@@ -11,5 +11,6 @@ public class DutySystemApplication {
     public static void main(String[] args) {
         SpringApplication.run(DutySystemApplication.class,args);
         System.out.println("启动成功~~");
+        System.out.println(WebUtils.passwordEncoder("root"));
     }
 }

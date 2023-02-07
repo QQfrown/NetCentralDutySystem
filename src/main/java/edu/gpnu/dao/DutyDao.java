@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface DutyDao extends BaseMapper<Duty> {
     List<Worksheet> getDutyWorksheetsByUserId(String userId);
+    List<Worksheet> getOneDutyWorksheetByUserId(String userId,Integer weekNum);
 }

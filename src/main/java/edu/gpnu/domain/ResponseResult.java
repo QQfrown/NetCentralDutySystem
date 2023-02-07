@@ -39,6 +39,14 @@ public class ResponseResult<T> {
         this.setMsg("request error!!!");
     }
 
+    public void integerRequestNormal(T data){
+        if ((Integer) data == 0){
+            this.operationError();
+        }else {
+            this.requestNormal(data);
+        }
+    }
+
 
     public ResponseResult() {
     }
