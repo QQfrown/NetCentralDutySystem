@@ -12,5 +12,23 @@
             ur.user_id = #{userId}
           AND r.`status` = 0
     </select>
-
+    <select id="selecUsertById" resultType="edu.gpnu.domain.User">
+        select
+            id,
+            user_name as userName,
+            password,
+            nick_name as nickName,
+            real_name as realName,
+            `number`,
+            id_number as idNumber,
+            campus,college,major,avatar,telephone,dormitory,email,sex,birthday,
+            user_type as userType,status,
+            create_time as createTime,
+            create_by as createBy,
+            update_by as updateBy,
+            update_time as updateTime,
+            remark
+        from user
+        where id=#{id}
+    </select>
 </mapper>
