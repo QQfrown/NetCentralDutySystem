@@ -6,9 +6,9 @@
         select
             w.id,w.week_num,w.day_week,w.day_num,w.create_by,w.create_time,w.update_by,w.update_time,w.remark
         from
-            schedule as s left join worksheet as w
-                                on
-                                    s.worksheet_id=w.id
+            schedule as s join worksheet as w
+        on
+            s.worksheet_id=w.id
         where
             s.user_id = #{userId}
     </select>
@@ -17,9 +17,9 @@
         select
             w.id,w.week_num,w.day_week,w.day_num,w.create_by,w.create_time,w.update_by,w.update_time,w.remark
         from
-            schedule as s left join worksheet as w
-                                on
-                                    s.worksheet_id=w.id and s.week_num = #{weekNum}
+            schedule as s join worksheet as w
+        on
+            s.worksheet_id=w.id and w.week_num = #{weekNum}
         where
             s.user_id = #{userId}
     </select>

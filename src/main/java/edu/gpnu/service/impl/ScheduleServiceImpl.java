@@ -40,14 +40,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         int count = 0;
         if (weekNumBegin <= weekNumEnd && Objects.nonNull(dayWeek) && Objects.nonNull(dayNum) && Objects.nonNull(userId)){
             for (int i = weekNumBegin ; i <= weekNumEnd;i++){
-                count++;
                 String worksheetId = worksheetService.GetIdByTime(i, dayWeek, dayNum);
-                scheduleDao.insert(new Schedule(userId,worksheetId));
+                count = count + scheduleDao.insert(new Schedule(userId,worksheetId));
             }
-            if (count-1 == weekNumEnd - weekNumBegin){
-                return count;
-            }
-            else return 0;
         }
         return count;
     }
@@ -70,13 +65,8 @@ public class ScheduleServiceImpl implements ScheduleService {
                 updateWrapper.eq("user_id",userId);
                 updateWrapper.eq("worksheet_id",oldWorksheetId);
                 updateWrapper.set("worksheet_id",newWorksheetId);
-                scheduleDao.update(null,updateWrapper);
-                count++;
+                count = count + scheduleDao.update(null,updateWrapper);
             }
-            if (count-1 == weekNumEnd - weekNumBegin){
-                return count;
-            }
-            else return 0;
         }
         return count;
     }
@@ -111,13 +101,8 @@ public class ScheduleServiceImpl implements ScheduleService {
                 QueryWrapper<Schedule> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("user_id",userId);
                 queryWrapper.eq("worksheet_id",worksheetId);
-                scheduleDao.delete(queryWrapper);
-                count++;
+                count = count + scheduleDao.delete(queryWrapper);
             }
-            if (count-1 == weekNumEnd - weekNumBegin){
-                return count;
-            }
-            else return 0;
         }
         return count;
     }

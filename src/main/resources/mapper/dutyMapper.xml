@@ -6,7 +6,7 @@
         select
             w.id,w.week_num,w.day_week,w.day_num,w.create_by,w.create_time,w.update_by,w.update_time,w.remark
         from
-            duty as d left join worksheet as w
+            duty as d join worksheet as w
         on
             d.worksheet_id=w.id
         where
@@ -17,7 +17,7 @@
         select
             w.id,w.week_num,w.day_week,w.day_num,w.create_by,w.create_time,w.update_by,w.update_time,w.remark
         from
-            duty as d left join worksheet as w
+            duty as d join worksheet as w
          on
             d.worksheet_id=w.id and d.week_num = #{weekNum}
         where

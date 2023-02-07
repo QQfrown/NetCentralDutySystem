@@ -40,14 +40,9 @@ public class DutyServiceImpl implements DutyService {
         int count = 0;
         if (weekNumBegin <= weekNumEnd && Objects.nonNull(dayWeek) && Objects.nonNull(dayNum) && Objects.nonNull(userId) && Objects.nonNull(dutyType)){
             for (int i = weekNumBegin ; i <= weekNumEnd;i++){
-                count++;
                 String worksheetId = worksheetService.GetIdByTime(i, dayWeek, dayNum);
-                dutyDao.insert(new Duty(userId,worksheetId,dutyType));
+                count = count + dutyDao.insert(new Duty(userId,worksheetId,dutyType));
             }
-            if (count-1 == weekNumEnd - weekNumBegin){
-                return count;
-            }
-            else return 0;
         }
         return count;
     }
@@ -100,13 +95,8 @@ public class DutyServiceImpl implements DutyService {
                 updateWrapper.eq("user_id",userId);
                 updateWrapper.eq("worksheet_id",worksheetId);
                 updateWrapper.set("duty_type",dutyType);
-                dutyDao.update(null,updateWrapper);
-                count++;
+                count = count + dutyDao.update(null,updateWrapper);
             }
-            if (count-1 == weekNumEnd - weekNumBegin){
-                return count;
-            }
-            else return 0;
         }
         return count;
     }
@@ -122,13 +112,8 @@ public class DutyServiceImpl implements DutyService {
                 updateWrapper.eq("user_id",userId);
                 updateWrapper.eq("worksheet_id",oldWorksheetId);
                 updateWrapper.set("worksheet_id",newWorksheetId);
-                dutyDao.update(null,updateWrapper);
-                count++;
+                count = count + dutyDao.update(null,updateWrapper);
             }
-            if (count-1 == weekNumEnd - weekNumBegin){
-                return count;
-            }
-            else return 0;
         }
         return count;
     }
@@ -164,13 +149,8 @@ public class DutyServiceImpl implements DutyService {
                 QueryWrapper<Duty> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("user_id",userId);
                 queryWrapper.eq("worksheet_id",worksheetId);
-                dutyDao.delete(queryWrapper);
-                count++;
+                count = count + dutyDao.delete(queryWrapper);
             }
-            if (count-1 == weekNumEnd - weekNumBegin){
-                return count;
-            }
-            else return 0;
         }
         return count;
     }

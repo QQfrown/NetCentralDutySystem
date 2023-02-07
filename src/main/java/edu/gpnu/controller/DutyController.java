@@ -37,7 +37,7 @@ public class DutyController {
                                                Integer dayNum,String userId,Integer dutyType){
         ResponseResult<Integer> result = new ResponseResult<>();
         Integer insertCount = dutyService.addRangeDutyInfo(weekNumBegin, weekNumEnd, dayWeek, dayNum, userId, dutyType);
-        result.integerRequestNormal(insertCount);
+        result.requestNormal(insertCount);
         return result;
     }
 
@@ -45,7 +45,7 @@ public class DutyController {
     public ResponseResult<Integer> addOneDutyInfo(Integer weekNum,Integer dayWeek,Integer dayNum,String userId,Integer dutyType){
         ResponseResult<Integer> result = new ResponseResult<>();
         Integer insertCount = dutyService.addOneDutyInfo(weekNum, dayWeek, dayNum, userId, dutyType);
-        result.integerRequestNormal(insertCount);
+        result.requestNormal(insertCount);
         return result;
     }
 
@@ -65,7 +65,7 @@ public class DutyController {
     public ResponseResult<Integer> updateDutyDate(Integer weekNum, Integer oldDayWeek, Integer oldDayNum, Integer newDayWeek, Integer newDayNum,String userId){
         ResponseResult<Integer> result = new ResponseResult<>();
         Integer count = dutyService.updateDutyDate(weekNum,oldDayWeek,oldDayNum,newDayWeek,newDayNum,userId);
-        result.integerRequestNormal(count);
+        result.requestNormal(count);
         return result;
     }
 
@@ -73,7 +73,7 @@ public class DutyController {
     public ResponseResult<Integer> updateRangeDutyDate(Integer weekNumBegin, Integer weekNumEnd, Integer oldDayWeek, Integer oldDayNum, Integer newDayWeek, Integer newDayNum,String userId){
         ResponseResult<Integer> result = new ResponseResult<>();
         Integer count = dutyService.updateRangeDutyDate(weekNumBegin,weekNumEnd,oldDayWeek,oldDayNum,newDayWeek,newDayNum,userId);
-        result.integerRequestNormal(count);
+        result.requestNormal(count);
         return result;
     }
 
@@ -81,7 +81,7 @@ public class DutyController {
     public ResponseResult<Integer> updateDutyType(Integer weekNum, Integer dayWeek, Integer dayNum, String userId,Integer dutyType){
         ResponseResult<Integer> result = new ResponseResult<>();
         Integer count = dutyService.updateDutyType(weekNum, dayWeek, dayNum, userId, dutyType);
-        result.integerRequestNormal(count);
+        result.requestNormal(count);
         return result;
     }
 
@@ -90,7 +90,7 @@ public class DutyController {
     public ResponseResult<Integer> updateRangeDutyType(Integer weekNumBegin,Integer weekNumEnd, Integer dayWeek, Integer dayNum, String userId,Integer dutyType){
         ResponseResult<Integer> result = new ResponseResult<>();
         Integer count = dutyService.updateRangeDutyType(weekNumBegin, weekNumEnd, dayWeek, dayNum, userId,dutyType);
-        result.integerRequestNormal(count);
+        result.requestNormal(count);
         return result;
     }
 
@@ -98,7 +98,7 @@ public class DutyController {
     public ResponseResult<Integer> deleteDutyInfo(Integer weekNum, Integer dayWeek, Integer dayNum, String userId){
         ResponseResult<Integer> result = new ResponseResult<>();
         Integer count = dutyService.deleteDutyInfo(weekNum, dayWeek, dayNum, userId);
-        result.integerRequestNormal(count);
+        result.requestNormal(count);
         return result;
     }
 
@@ -106,7 +106,7 @@ public class DutyController {
     public ResponseResult<Integer> deleteRangeDutyInfo(Integer weekNumBegin,Integer weekNumEnd, Integer dayWeek, Integer dayNum, String userId){
         ResponseResult<Integer> result = new ResponseResult<>();
         Integer count = dutyService.deleteRangeDutyInfo(weekNumBegin, weekNumEnd, dayWeek, dayNum, userId);
-        result.integerRequestNormal(count);
+        result.requestNormal(count);
         return result;
     }
 
