@@ -3,11 +3,14 @@ package edu.gpnu.service;
 import edu.gpnu.domain.Worksheet;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DutyService {
     List<Worksheet> getDutyWorksheetsByUserId(String userId);
 
     List<Worksheet> getOneDutyWorksheetByUserId(String userId,Integer weekNum);
+
+    List<Map<String,Object>> getCanChangeShiftsUsers(Integer localWeekNum, Integer localDayWeek, Integer localDayNum,String userId);
 
     Integer addRangeDutyInfo(Integer weekNumBegin, Integer weekNumEnd, Integer dayWeek, Integer dayNum, String userId, Integer dutyType);
 

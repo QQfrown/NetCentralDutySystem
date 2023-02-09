@@ -9,4 +9,5 @@ import java.util.List;
 public interface ScheduleDao extends BaseMapper<Schedule> {
     List<Worksheet> getWorksheetSchedulesByUserId(String userId);
     List<Worksheet> getOneWorksheetScheduleByUserId(String userId,Integer weekNum);
+    List<Schedule> getCanTakeShiftsUsers(String worksheetId);
 }

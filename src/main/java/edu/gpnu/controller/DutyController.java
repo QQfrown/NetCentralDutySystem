@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/duty")
@@ -29,6 +30,13 @@ public class DutyController {
     public ResponseResult<List<Worksheet>> getAWeekDuty(String userId,Integer weekNum){
         ResponseResult<List<Worksheet>> result = new ResponseResult<>();
         result.requestNormal(dutyService.getOneDutyWorksheetByUserId(userId,weekNum));
+        return result;
+    }
+
+    @RequestMapping(value = "/getCanChangeShiftsUsers",method = RequestMethod.GET)
+    public ResponseResult<List<Map<String,Object>>> getCanChangeShiftsUsers(Integer weekNum,Integer dayWeek,Integer dayNum,String userId){
+        ResponseResult<List<Map<String,Object>>> result = new ResponseResult<>();
+        result.requestNormal(dutyService.getCanChangeShiftsUsers(weekNum,dayWeek,dayNum,userId));
         return result;
     }
 

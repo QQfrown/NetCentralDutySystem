@@ -24,4 +24,7 @@
             s.user_id = #{userId}
     </select>
 
+
+
+
 </mapper>

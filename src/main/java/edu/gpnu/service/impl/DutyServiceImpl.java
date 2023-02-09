@@ -3,17 +3,21 @@ package edu.gpnu.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import edu.gpnu.dao.DutyDao;
+import edu.gpnu.dao.UserDao;
 import edu.gpnu.domain.Duty;
 import edu.gpnu.domain.Schedule;
+import edu.gpnu.domain.User;
 import edu.gpnu.domain.Worksheet;
 import edu.gpnu.service.DutyService;
+import edu.gpnu.service.ScheduleService;
 import edu.gpnu.service.WorksheetService;
+import edu.gpnu.utils.RedisCache;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class DutyServiceImpl implements DutyService {
@@ -24,14 +28,96 @@ public class DutyServiceImpl implements DutyService {
     @Resource
     private WorksheetService worksheetService;
 
+    @Resource
+    private ScheduleService scheduleService;
+
+    @Resource
+    private RedisCache redisCache;
+
+    @Resource
+    private UserDao userDao;
+
     @Override
     public List<Worksheet> getDutyWorksheetsByUserId(String userId) {
-        return dutyDao.getDutyWorksheetsByUserId(userId);
+        List<Worksheet> redisDutyList = redisCache.getCacheList("duty:" + userId);
+        if (Objects.isNull(redisDutyList) || redisDutyList.isEmpty()){
+            List<Worksheet> worksheets = dutyDao.getDutyWorksheetsByUserId(userId);
+            redisCache.setCacheList("duty:" + userId,worksheets);
+            redisCache.expire("duty:" + userId,1, TimeUnit.HOURS);
+            return worksheets;
+        }else{
+            return redisDutyList;
+        }
     }
 
     @Override
     public List<Worksheet> getOneDutyWorksheetByUserId(String userId, Integer weekNum) {
-        return dutyDao.getOneDutyWorksheetByUserId(userId,weekNum);
+        List<Worksheet> redisDutyList = redisCache.getCacheList("week_num:"+weekNum+":duty:" + userId);
+        if (Objects.isNull(redisDutyList) || redisDutyList.isEmpty()){
+            List<Worksheet> worksheets = dutyDao.getOneDutyWorksheetByUserId(userId,weekNum);
+            redisCache.setCacheList("week_num:"+weekNum+":duty:" + userId,worksheets);
+            redisCache.expire("week_num:"+weekNum+":duty:"+ userId,1,TimeUnit.HOURS);
+            return worksheets;
+        }else{
+            return redisDutyList;
+        }
+    }
+
+    /**
+     *
+     * @param userId 用户ID
+     * @param localWeekNum 所在周
+     * @param localDayWeek 所在天
+     * @param localDayNum   所在节
+     * 获取可换班用户满足的条件：
+     *  1、我这个班没有他
+     *  2、我这个班他有时间
+     *  3、他的班我有时间
+     *  step：
+     *       1、获取本周的值班信息，并去除这个班的值班信息，即：我这个班没有他
+     *       2、获取本周我的反课表，找出我可以换的班，遍历step1的结果(注意需要去除自己)，找出我可以换的值班信息，即：他的班我有时间。
+     *       3、遍历step2结果的用户的反课表，找出有时间值我这个班的值班信息
+     * @return
+     */
+    @Override
+    public List<Map<String,Object>> getCanChangeShiftsUsers(Integer localWeekNum, Integer localDayWeek, Integer localDayNum,String userId) {
+        List<String> idByWeek = worksheetService.getIdByWeek(localWeekNum);
+        String localWorksheetId = worksheetService.GetIdByTime(localWeekNum, localDayWeek, localDayNum);
+        idByWeek.remove(localWorksheetId);
+        QueryWrapper<Duty> dutyQueryWrapper = new QueryWrapper<>();
+        dutyQueryWrapper.in("worksheet_id",idByWeek);
+        List<Duty> stepOneResult = dutyDao.selectList(dutyQueryWrapper);
+        List<Duty> stepTwoResult = new ArrayList<>();
+        List<Map<String,Object>> finalResult = new ArrayList<>();
+        List<Schedule> mySchedules = scheduleService.getOneWeekScheduleInfo(userId, localWeekNum);
+        for (Duty duty : stepOneResult){
+            if (!duty.getUserId().equals(userId)){
+                for (Schedule schedule : mySchedules){
+                    if (schedule.getWorksheetId().equals(duty.getWorksheetId())){
+                        stepTwoResult.add(duty);
+                        break;
+                    }
+                }
+            }
+        }
+        for (Duty duty : stepTwoResult){
+            List<Schedule> schedules = scheduleService.getOneWeekScheduleInfo(duty.getUserId(), localWeekNum);
+            for (Schedule schedule : schedules){
+                if (schedule.getWorksheetId().equals(localWorksheetId)){
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("userId",duty.getUserId());
+                    User user = userDao.selecUsertById(duty.getUserId());
+                    map.put("realName",user.getRealName());
+                    Worksheet worksheet = worksheetService.getWorksheetById(duty.getWorksheetId());
+                    map.put("weekNum",worksheet.getWeekNum());
+                    map.put("dayWeek",worksheet.getDayWeek());
+                    map.put("dayNum",worksheet.getDayNum());
+                    finalResult.add(map);
+                    break;
+                }
+            }
+        }
+        return finalResult;
     }
 
     @Override

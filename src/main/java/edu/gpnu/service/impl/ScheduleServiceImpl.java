@@ -7,12 +7,14 @@ import edu.gpnu.domain.Schedule;
 import edu.gpnu.domain.Worksheet;
 import edu.gpnu.service.ScheduleService;
 import edu.gpnu.service.WorksheetService;
+import edu.gpnu.utils.RedisCache;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -23,14 +25,42 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Resource
     private ScheduleDao scheduleDao;
 
+    @Resource
+    private RedisCache redisCache;
+
     @Override
     public List<Worksheet> getWorksheetSchedulesByUserId(String userId) {
-        return scheduleDao.getWorksheetSchedulesByUserId(userId);
+        List<Worksheet> redisDutyList = redisCache.getCacheList("schedule:" + userId);
+        if (Objects.isNull(redisDutyList) || redisDutyList.isEmpty()){
+            List<Worksheet> worksheets = scheduleDao.getWorksheetSchedulesByUserId(userId);
+            redisCache.setCacheList("schedule:" + userId,worksheets);
+            redisCache.expire("schedule:" + userId,1, TimeUnit.HOURS);
+            return worksheets;
+        }else{
+            return redisDutyList;
+        }
     }
 
     @Override
     public List<Worksheet> getOneWorksheetScheduleByUserId(String userId, Integer weekNum) {
-        return scheduleDao.getOneWorksheetScheduleByUserId(userId,weekNum);
+        List<Worksheet> redisDutyList = redisCache.getCacheList("week_num:"+weekNum+":schedule:" + userId);
+        if (Objects.isNull(redisDutyList) || redisDutyList.isEmpty()){
+            List<Worksheet> worksheets = scheduleDao.getOneWorksheetScheduleByUserId(userId,weekNum);
+            redisCache.setCacheList("week_num:"+weekNum+":schedule:" + userId,worksheets);
+            redisCache.expire("week_num:"+weekNum+":schedule:"+ userId,1,TimeUnit.HOURS);
+            return worksheets;
+        }else{
+            return redisDutyList;
+        }
+    }
+
+    @Override
+    public List<Schedule> getOneWeekScheduleInfo(String userId, Integer weekNum) {
+        QueryWrapper<Schedule> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",userId);
+        List<String> ids = worksheetService.getIdByWeek(weekNum);
+        queryWrapper.in("worksheet_id",ids);
+        return scheduleDao.selectList(queryWrapper);
     }
 
     @Override

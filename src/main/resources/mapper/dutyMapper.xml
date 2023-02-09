@@ -19,7 +19,7 @@
         from
             duty as d join worksheet as w
          on
-            d.worksheet_id=w.id and d.week_num = #{weekNum}
+            d.worksheet_id=w.id and w.week_num = #{weekNum}
         where
             d.user_id = #{userId}
     </select>
