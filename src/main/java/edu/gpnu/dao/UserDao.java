@@ -6,4 +6,6 @@ import edu.gpnu.domain.User;
 public interface UserDao extends BaseMapper<User> {
     String selectPermsByUserId(String userId);
     User selecUsertById(String userId);
+
+    Integer insertUser(User user);
 }

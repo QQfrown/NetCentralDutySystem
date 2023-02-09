@@ -1,5 +1,6 @@
 package edu.gpnu;
 
+import edu.gpnu.enumeration.RoleIdEnum;
 import edu.gpnu.utils.WebUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -11,5 +12,7 @@ public class DutySystemApplication {
     public static void main(String[] args) {
         SpringApplication.run(DutySystemApplication.class,args);
         System.out.println("启动成功~~");
+        System.out.println(WebUtils.passwordEncoder("root"));
+        System.out.println(RoleIdEnum.TEAMLEADER.getRoleID());
     }
 }

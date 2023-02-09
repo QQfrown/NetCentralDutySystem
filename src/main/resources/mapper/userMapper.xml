@@ -1,34 +1,63 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="edu.gpnu.dao.UserDao">
-
+    <resultMap id="UserMap" type="edu.gpnu.domain.User">
+        <!--对象的唯一标识，官方解释是：为了提高mybatis的性能。建议写上。-->
+        <id property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <!--当属性名和数据库列名一致时，可以省略。但建议都写上。-->
+        <!--javaType用来指定属性类型。jdbcType用来指定列类型。一般可以省略。-->
+        <result property="nickName" column="nick_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="realName" column="real_name"/>
+        <result property="idNumber" column="id_number"/>
+        <result property="userType" column="user_type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
     <select id="selectPermsByUserId" resultType="java.lang.String">
-        SELECT
-            DISTINCT r.permissions
-        FROM
-            user_role as ur
-                LEFT JOIN `role` as r ON ur.`role_id` = r.`id`
-        WHERE
-            ur.user_id = #{userId}
+        SELECT DISTINCT r.permissions
+        FROM user_role as ur
+                 LEFT JOIN `role` as r ON ur.`role_id` = r.`id`
+        WHERE ur.user_id = #{userId}
           AND r.`status` = 0
     </select>
-    <select id="selecUsertById" resultType="edu.gpnu.domain.User">
-        select
-            id,
-            user_name as userName,
-            password,
-            nick_name as nickName,
-            real_name as realName,
-            `number`,
-            id_number as idNumber,
-            campus,college,major,avatar,telephone,dormitory,email,sex,birthday,
-            user_type as userType,status,
-            create_time as createTime,
-            create_by as createBy,
-            update_by as updateBy,
-            update_time as updateTime,
-            remark
+
+    <!--结果映射有三种方法，1.使用 sql as 2.使用resultMap 3.使用mybatis自带的驼峰命名映射功能，这里使用第二种方法。-->
+    <select id="selecUsertById" resultMap="UserMap">
+        select *
         from user
-        where id=#{id}
+        where id = #{id}
     </select>
+<!--    /*这里 id 、username、password是必须传入的，否则就会报错，这里这样写是为了提高通用性*/-->
+    <insert id="insertUser">
+        insert into user
+        <set>
+            id=#{id},
+            <if test="userName !=null and userName!=''">user_name=#{userName},</if>
+            <if test="password !=null and password!=''">password=#{password},</if>
+            <if test="nickName !=null and nickName!=''">nick_name=#{nickName},</if>
+            <if test="realName !=null and realName!=''">real_name=#{realName},</if>
+            <if test="number !=null and number!=''">`number`=#{number},</if>
+            <if test="idNumber !=null and idNumber!=''">id_number=#{idNumber},</if>
+            <if test="campus !=null and campus!=''">campus=#{campus},</if>
+            <if test="college !=null and college!=''">college=#{college},</if>
+            <if test="major !=null and major!=''">major=#{major},</if>
+            <if test="avatar !=null and avatar!=''">avatar=#{avatar},</if>
+            <if test="telephone !=null and telephone!=''">telephone=#{telephone},</if>
+            <if test="dormitory !=null and dormitory!=''">dormitory=#{dormitory},</if>
+            <if test="email !=null and email!=''">email=#{email},</if>
+            <if test="sex !=null and sex!=''">sex=#{sex},</if>
+            <if test="birthday !=null and birthday!=''">birthday=#{birthday},</if>
+            <if test="userType !=null and userType!=''">user_type=#{userType},</if>
+            <if test="status !=null and status!=''">status=#{status},</if>
+            <if test="createTime !=null and createTime!=''">create_time=#{createTime},</if>
+            <if test="createBy !=null and createBy!=''">create_by=#{createBy},</if>
+            <if test="updateBy !=null and updateBy!=''">update_by=#{updateBy},</if>
+            <if test="updateTime !=null and updateTime!=''">update_time=#{updateTime},</if>
+            <if test="remark !=null and remark!=''">remark=#{remark},</if>
+        </set>
+    </insert>
+
 </mapper>

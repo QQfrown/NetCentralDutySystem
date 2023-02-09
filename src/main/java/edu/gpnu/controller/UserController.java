@@ -16,11 +16,10 @@ public class UserController {
 
     @Resource
     private UserService userService;
-
     @RequestMapping(value = "/addUser",method = RequestMethod.POST)
     public ResponseResult<Integer> addUser(@RequestBody User user){
         ResponseResult<Integer> result = new ResponseResult<>();
-        result.requestNormal(userService.addUser(user));
+        result.jungeResultByResultCode(userService.addUser(user));
         return result;
     }
     @RequestMapping(value = "/updateUserById",method = RequestMethod.POST)

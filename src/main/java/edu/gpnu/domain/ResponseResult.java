@@ -33,6 +33,16 @@ public class ResponseResult<T> {
             this.setMsg("request error");
         }
     }
+    public void jungeResultByResultCode(Integer result){
+        if (result == 1){
+            this.setCode(HttpURLConnection.HTTP_OK);
+            this.setData(data);
+            this.setMsg("request success");
+        }else {
+            this.setCode(HttpURLConnection.HTTP_FORBIDDEN);
+            this.setMsg("request error");
+        }
+    }
 
     public void operationError(){
         this.setCode(HttpURLConnection.HTTP_FORBIDDEN);
