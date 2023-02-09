@@ -49,7 +49,6 @@ public class ResponseResult<T> {
         this.setMsg("request error!!!");
     }
 
-
     public ResponseResult() {
     }
 

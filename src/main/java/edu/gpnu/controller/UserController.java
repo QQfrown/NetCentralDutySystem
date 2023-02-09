@@ -22,18 +22,21 @@ public class UserController {
         result.jungeResultByResultCode(userService.addUser(user));
         return result;
     }
+
     @RequestMapping(value = "/updateUserById",method = RequestMethod.POST)
     public ResponseResult<Integer> updateUser(@RequestBody User user){
         ResponseResult<Integer> result = new ResponseResult<>();
         result.requestNormal(userService.updateUserById(user));
         return result;
     }
+
     @RequestMapping(value = "/deleteUserById",method = RequestMethod.POST)
     public ResponseResult<Integer> deleteUser(@RequestBody User user){
         ResponseResult<Integer> result = new ResponseResult<>();
         result.requestNormal(userService.deleteUserById(user.getId()));
         return result;
     }
+
     @RequestMapping(value = "/getUserById",method = RequestMethod.GET)
     public ResponseResult<User> getUserById(@RequestBody User user){
         User userById = userService.getUserById(user.getId());
@@ -41,4 +44,5 @@ public class UserController {
         result.requestNormal(userById);
         return result;
     }
+
 }

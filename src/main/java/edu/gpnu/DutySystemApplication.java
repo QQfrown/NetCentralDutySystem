@@ -13,6 +13,5 @@ public class DutySystemApplication {
         SpringApplication.run(DutySystemApplication.class,args);
         System.out.println("启动成功~~");
         System.out.println(WebUtils.passwordEncoder("root"));
-        System.out.println(RoleIdEnum.TEAMLEADER.getRoleID());
     }
 }
