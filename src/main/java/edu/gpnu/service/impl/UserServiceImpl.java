@@ -6,7 +6,6 @@ import edu.gpnu.dao.UserDao;
 import edu.gpnu.dao.UserRoleDao;
 import edu.gpnu.domain.User;
 import edu.gpnu.domain.UserRole;
-import edu.gpnu.enumeration.RoleIdEnum;
 import edu.gpnu.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -27,7 +26,7 @@ public class UserServiceImpl implements UserService {
     @Resource
     private RoleDao roleDao;
 
-//Create
+    //Create
     @Transactional(isolation = Isolation.READ_UNCOMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public Integer addUser(User user) {
@@ -38,8 +37,8 @@ public class UserServiceImpl implements UserService {
         int insertUserResult = userDao.insertUser(user);
         //user 对象中的 id ---》在上一步插入完成后会自动赋值
         //roleId根据 角色名查redis缓存内容 或者查表后获得
-        String networkManagemenID = roleDao.getRoleIdByDescription("网管");
-        UserRole userRole = new UserRole(user.getId(), networkManagemenID);
+        String networkManagementID = roleDao.getRoleIdByDescription("网管");
+        UserRole userRole = new UserRole(user.getId(), networkManagementID);
         int insertRoleResult = userRoleDao.insert(userRole);
         int result = 0;
         if (insertRoleResult == 1 && insertUserResult == 1) {

@@ -22,6 +22,7 @@ public class User implements Serializable {
     @TableId(type = IdType.ASSIGN_ID)
     private String id;
 
+    private String openId;
     private String userName;
     private String password;
     private String nickName;
@@ -48,8 +49,9 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String id, String userName, String password, String nickName, String realName, String number, String idNumber, String campus, String college, String major, String avatar, String telephone, String dormitory, String email, Boolean sex, String birthday, Boolean userType, Boolean status, Timestamp createTime, String createBy, String updateBy, Timestamp updateTime, String remark) {
+    public User(String id, String openId, String userName, String password, String nickName, String realName, String number, String idNumber, String campus, String college, String major, String avatar, String telephone, String dormitory, String email, Boolean sex, String birthday, Boolean userType, Boolean status, Timestamp createTime, String createBy, String updateBy, Timestamp updateTime, String remark) {
         this.id = id;
+        this.openId = openId;
         this.userName = userName;
         this.password = password;
         this.nickName = nickName;
@@ -80,6 +82,14 @@ public class User implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     public String getUserName() {
@@ -262,6 +272,7 @@ public class User implements Serializable {
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
+                ", openId='" + openId + '\'' +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", nickName='" + nickName + '\'' +
@@ -292,12 +303,11 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(userName, user.userName) && Objects.equals(password, user.password) && Objects.equals(nickName, user.nickName) && Objects.equals(realName, user.realName) && Objects.equals(number, user.number) && Objects.equals(idNumber, user.idNumber) && Objects.equals(campus, user.campus) && Objects.equals(college, user.college) && Objects.equals(major, user.major) && Objects.equals(avatar, user.avatar) && Objects.equals(telephone, user.telephone) && Objects.equals(dormitory, user.dormitory) && Objects.equals(email, user.email) && Objects.equals(sex, user.sex) && Objects.equals(birthday, user.birthday) && Objects.equals(userType, user.userType) && Objects.equals(status, user.status) && Objects.equals(createTime, user.createTime) && Objects.equals(createBy, user.createBy) && Objects.equals(updateBy, user.updateBy) && Objects.equals(updateTime, user.updateTime) && Objects.equals(remark, user.remark);
+        return Objects.equals(id, user.id) && Objects.equals(openId, user.openId) && Objects.equals(userName, user.userName) && Objects.equals(password, user.password) && Objects.equals(nickName, user.nickName) && Objects.equals(realName, user.realName) && Objects.equals(number, user.number) && Objects.equals(idNumber, user.idNumber) && Objects.equals(campus, user.campus) && Objects.equals(college, user.college) && Objects.equals(major, user.major) && Objects.equals(avatar, user.avatar) && Objects.equals(telephone, user.telephone) && Objects.equals(dormitory, user.dormitory) && Objects.equals(email, user.email) && Objects.equals(sex, user.sex) && Objects.equals(birthday, user.birthday) && Objects.equals(userType, user.userType) && Objects.equals(status, user.status) && Objects.equals(createTime, user.createTime) && Objects.equals(createBy, user.createBy) && Objects.equals(updateBy, user.updateBy) && Objects.equals(updateTime, user.updateTime) && Objects.equals(remark, user.remark);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, password, nickName, realName, number, idNumber, campus, college, major, avatar, telephone, dormitory, email, sex, birthday, userType, status, createTime, createBy, updateBy, updateTime, remark);
+        return Objects.hash(id, openId, userName, password, nickName, realName, number, idNumber, campus, college, major, avatar, telephone, dormitory, email, sex, birthday, userType, status, createTime, createBy, updateBy, updateTime, remark);
     }
-
 }
