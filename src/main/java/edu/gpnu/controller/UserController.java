@@ -40,6 +40,7 @@ public class UserController {
     @RequestMapping(value = "/getUserById",method = RequestMethod.GET)
     public ResponseResult<User> getUserById(@RequestBody User user){
         User userById = userService.getUserById(user.getId());
+        userById.setPassword(null);
         ResponseResult<User> result = new ResponseResult<>();
         result.requestNormal(userById);
         return result;

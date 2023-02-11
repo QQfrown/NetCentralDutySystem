@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.HttpURLConnection;
 import java.util.Map;
 
 /**
@@ -59,6 +60,19 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseResult<Map<String,Object>> login(@RequestBody User user){
         return loginServer.login(user);
+    }
+
+    @PostMapping("/wechatlogin")
+    public ResponseResult<Map<String,Object>> loginForWechat(@RequestParam(name = "code") String code,@RequestBody User user){
+        return loginServer.loginForWechat(code,user);
+    }
+
+    @GetMapping("/checktoken")
+    public ResponseResult<Object> checkToken(){
+        ResponseResult<Object> result = new ResponseResult<>();
+        result.setCode(HttpURLConnection.HTTP_OK);
+        result.setMsg("token 未过期");
+        return result;
     }
 
     @RequestMapping(value = "/logout",method = RequestMethod.POST)
