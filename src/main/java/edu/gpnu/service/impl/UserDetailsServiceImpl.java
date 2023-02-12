@@ -39,8 +39,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         List<String> permissions = new ArrayList<>();
+
         //数据库权限字符串使用 ； 隔开
         String[] permissionsString = userDao.selectPermsByUserId(user.getId()).split(";");
+
         for (String permission : permissionsString) {
             permissions.add(permission);
         }

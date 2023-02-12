@@ -88,9 +88,6 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public ResponseResult logout(String token) {
         Claims claims;
-        if (!StringUtils.hasText(token)){
-            return  new ResponseResult(HttpURLConnection.HTTP_FORBIDDEN,"未携带token");
-        }
         try {
              claims = JwtUtil.parseJWT(token);
         } catch (Exception e) {
@@ -100,7 +97,6 @@ public class LoginServiceImpl implements LoginService {
         String userId = claims.getSubject();
         String key = "login:"+userId;
         redisCache.deleteObject(key);
-
         return new ResponseResult(HttpURLConnection.HTTP_OK,"成功退出登录");
     }
 }

@@ -10,6 +10,8 @@ public interface DutyService {
 
     List<Worksheet> getOneDutyWorksheetByUserId(String userId,Integer weekNum);
 
+    List<String> getAClassUserRealNames(Integer weekNum,Integer dayWeek,Integer dayNum);
+
     List<Map<String,Object>> getCanChangeShiftsUsers(Integer localWeekNum, Integer localDayWeek, Integer localDayNum,String userId);
 
     Integer addRangeDutyInfo(Integer weekNumBegin, Integer weekNumEnd, Integer dayWeek, Integer dayNum, String userId, Integer dutyType);

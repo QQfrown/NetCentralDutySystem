@@ -24,4 +24,10 @@
             d.user_id = #{userId}
     </select>
 
+    <select id="getAClassUserRealNames" resultType="String">
+        select real_name from user
+            where
+        id in (select user_id from duty where worksheet_id = #{worksheetId})
+    </select>
+
 </mapper>

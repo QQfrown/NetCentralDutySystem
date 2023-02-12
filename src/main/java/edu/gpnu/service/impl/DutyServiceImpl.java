@@ -63,6 +63,13 @@ public class DutyServiceImpl implements DutyService {
         }
     }
 
+    @Override
+    public List<String> getAClassUserRealNames(Integer weekNum, Integer dayWeek, Integer dayNum) {
+        String worksheetId = worksheetService.GetIdByTime(weekNum, dayWeek, dayNum);
+        List<String> userRealNames = dutyDao.getAClassUserRealNames(worksheetId);
+        return userRealNames;
+    }
+
     /**
      *
      * @param userId 用户ID

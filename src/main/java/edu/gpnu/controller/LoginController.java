@@ -75,8 +75,8 @@ public class LoginController {
         return result;
     }
 
-    @RequestMapping(value = "/logout",method = RequestMethod.POST)
-    public ResponseResult logout(@RequestBody HttpServletRequest request){
+    @PostMapping("/cancellation")
+    public ResponseResult logout(HttpServletRequest request){
         String token = request.getHeader("token");
         return loginServer.logout(token);
     }
